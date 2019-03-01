@@ -1,4 +1,4 @@
-package gov.va.api.health.sentinel;
+package gov.va.api.health.sentinel.selenium;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,6 +15,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+/** Selenium driver for accessing the Developer API portal page. */
 @Slf4j
 public class DevApiPortal {
   private ChromeDriver driver;

@@ -1,4 +1,4 @@
-package gov.va.api.health.sentinel;
+package gov.va.api.health.sentinel.selenium;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.startsWith;
@@ -307,7 +307,7 @@ public class IdMeOauthRobot {
     @JsonProperty("state")
     String state;
 
-    boolean isError() {
+    public boolean isError() {
       return isNotBlank(error) || isNotBlank(errorDescription);
     }
   }

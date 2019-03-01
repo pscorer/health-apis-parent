@@ -1,13 +1,21 @@
 package gov.va.api.health.sentinel;
 
 import java.util.Locale;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public enum Environment {
   LAB,
   LOCAL,
   PROD,
   QA,
   STAGING;
+
+  static {
+    String env = System.getProperty("sentinel", "LOCAL").toUpperCase(Locale.ENGLISH);
+    log.info(
+        "Using {} Sentinel environment (Override with -Dsentinel=LAB|LOCAL|QA|PROD|STAGING)", env);
+  }
 
   /** Parse the system property 'sentinel' into the appropriate enum. */
   static Environment get() {
