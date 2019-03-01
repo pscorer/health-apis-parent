@@ -12,15 +12,14 @@ public enum Environment {
   STAGING;
 
   static {
-    String env = System.getProperty("sentinel", "LOCAL").toUpperCase(Locale.ENGLISH);
     log.info(
-        "Using {} Sentinel environment (Override with -Dsentinel=LAB|LOCAL|QA|PROD|STAGING)", env);
+        "Using {} Sentinel environment (Override with -Dsentinel=LAB|LOCAL|QA|PROD|STAGING)",
+        sentinelProperty());
   }
 
   /** Parse the system property 'sentinel' into the appropriate enum. */
   static Environment get() {
-    String env = System.getProperty("sentinel", "LOCAL").toUpperCase(Locale.ENGLISH);
-    switch (env) {
+    switch (sentinelProperty()) {
       case "LAB":
         return Environment.LAB;
       case "LOCAL":
@@ -32,7 +31,11 @@ public enum Environment {
       case "STAGING":
         return Environment.STAGING;
       default:
-        throw new IllegalArgumentException("Unknown sentinel environment: " + env);
+        throw new IllegalArgumentException("Unknown sentinel environment: " + sentinelProperty());
     }
+  }
+
+  private static String sentinelProperty() {
+    return System.getProperty("sentinel", "LOCAL").toUpperCase(Locale.ENGLISH);
   }
 }

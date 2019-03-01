@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Value
 @Builder
 @AllArgsConstructor
-public class ServiceDefinition {
+public final class ServiceDefinition {
   static {
     log.info(
         "Using jargonaut header is {} (Override -Djargonaut=true|false)",
