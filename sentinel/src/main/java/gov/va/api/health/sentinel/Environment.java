@@ -13,7 +13,7 @@ public enum Environment {
 
   static {
     log.info(
-        "Using {} Sentinel environment (Override with -Dsentinel=LAB|LOCAL|QA|PROD|STAGING)",
+        "Using {} Sentinel environment (Override with -Dsentinel=LAB|LOCAL|PROD|QA|STAGING)",
         sentinelProperty());
   }
 
