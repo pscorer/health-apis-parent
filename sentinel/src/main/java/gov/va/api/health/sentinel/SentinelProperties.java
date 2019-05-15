@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @UtilityClass
 public final class SentinelProperties {
+
   /** Supplies system property access-token, or throws exception if it doesn't exist. */
   public static String magicAccessToken() {
     final String magic = System.getProperty("access-token");
@@ -29,6 +30,28 @@ public final class SentinelProperties {
     }
     log.info("Using {} api path {} (Override with -D{}=<url>)", name, apiPath, property);
     return apiPath;
+  }
+
+  /**
+   * Get crawler ignores from a system property. Ignores are not factored into the crawlers result
+   * if they fail.
+   */
+  public static String optionCrawlerIgnores(String name) {
+    String ignores = System.getProperty("sentinel." + name + ".crawler.ignores");
+    if (isBlank(ignores)) {
+      log.info(
+          "No requests ignored. (Override with -Dsentinel.{}.crawler.ignores=<ignores> "
+              + "-- Place ignores in a comma separated list)",
+          name);
+    } else {
+      log.info(
+          "Ignoring the following requests: {} "
+              + "(Override with -Dsentinel.{}.crawler.ignores=<ignores> "
+              + "-- Place ignores in a comma separated list)",
+          ignores,
+          name);
+    }
+    return ignores;
   }
 
   /** Read url from a system property. */
