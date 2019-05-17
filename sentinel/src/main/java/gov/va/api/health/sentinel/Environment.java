@@ -38,8 +38,4 @@ public enum Environment {
   private static String sentinelProperty() {
     return System.getProperty("sentinel", "LOCAL").toUpperCase(Locale.ENGLISH);
   }
-
-  public boolean foo() {
-    return true;
-  }
 }
