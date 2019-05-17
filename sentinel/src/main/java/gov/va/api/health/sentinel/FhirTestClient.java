@@ -11,6 +11,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -18,22 +19,22 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * The FhirTestClient bakes in some functionality such as making the requests with all three
  * supported content types: application/json, application/fhir+json, and application/json+fhir. When
- * using this test client, callers will need to furnish a ResponsesAreFunctionallyEqualCheck that
- * will determine whether each of the three content types returns a functionally equivalent
- * (ignoring transient data like timestamps and sequence numbers) response.
+ * using this test client, callers will need to furnish an ErrorsAreFunctionallyEqual that will
+ * determine whether each of the three content types returns a functionally equivalent (ignoring
+ * transient data like timestamps and sequence numbers) response.
  */
 @Slf4j
 @Value
 @Builder
 public final class FhirTestClient implements TestClient {
-  private final ServiceDefinition service;
+  ServiceDefinition service;
 
-  private final ExecutorService executorService =
+  ExecutorService executorService =
       Executors.newFixedThreadPool(
           SentinelProperties.threadCount(
               "sentinel.threads", Runtime.getRuntime().availableProcessors()));
 
-  private final ResponsesAreFunctionallyEqualCheck functionalEqualityCheck;
+  @NonNull ErrorsAreFunctionallyEqual errorResponseEqualityCheck;
 
   Supplier<ObjectMapper> mapper;
 
@@ -88,9 +89,11 @@ public final class FhirTestClient implements TestClient {
        * Error responses must be returned as OOs but contain a timestamp in the diagnostics
        * that prevents direct comparison.
        */
-      assertThat(functionalEqualityCheck.equals(baselineResponse.body(), fhirJsonResponse.body()))
+      assertThat(
+              errorResponseEqualityCheck.equals(baselineResponse.body(), fhirJsonResponse.body()))
           .isTrue();
-      assertThat(functionalEqualityCheck.equals(baselineResponse.body(), jsonFhirResponse.body()))
+      assertThat(
+              errorResponseEqualityCheck.equals(baselineResponse.body(), jsonFhirResponse.body()))
           .isTrue();
     } else {
       // OK responses
